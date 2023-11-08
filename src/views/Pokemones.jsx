@@ -1,12 +1,29 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 
 const Pokemones = () => {
   const navigate = useNavigate();
   const { name } = useParams();
   const [selectedPokemon, setSelectedPokemon] = useState("");
+  const [pokemonList, setPokemonList] = useState([]);
+
+  useEffect(() => {
+    const fetchPokemonList = async () => {
+      try {
+        const response = await fetch(
+          `https://pokeapi.co/api/v2/pokemon?limit=20`
+        );
+        const data = await response.json();
+        const names = data.results.map((pokemon) => pokemon.name);
+        setPokemonList(names);
+      } catch (error) {
+        console.error("Error fetching Pokemon list:", error);
+      }
+    };
+
+    fetchPokemonList();
+  }, []);
 
   const handleSelectPokemon = (event) => {
     setSelectedPokemon(event.target.value);
@@ -17,7 +34,6 @@ const Pokemones = () => {
       navigate(`/Pokemones/${selectedPokemon}`);
     }
   };
-
 
   return (
     <div>
@@ -31,13 +47,11 @@ const Pokemones = () => {
               onChange={handleSelectPokemon}
             >
               <option value="">Pokemones</option>
-              <option value="pikachu">Pikachu</option>
-              <option value="charmander">Charmander</option>
-              <option value="bulbasaur">Bulbasaur</option>
-              <option value="squirtle">Squirtle</option>
-              <option value="caterpie">Caterpie</option>
-              <option value="pidgey">Pidgey</option>
-              <option value="rattata">Rattata</option>
+              {pokemonList.map((pokemonName) => (
+                <option key={pokemonName} value={pokemonName}>
+                  {pokemonName}
+                </option>
+              ))}
             </select>
           </div>
           <div>

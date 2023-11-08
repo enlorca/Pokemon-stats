@@ -32,7 +32,7 @@ const SelectedPokemon = () => {
           src={pokemonStats.sprites.other["official-artwork"].front_default}
           alt="Imagen del pokemon"
           style={{ width: "50%" }}
-        ></img>
+        />
         <div className="mt-5 d-flex flex-column justify-content-center align-items-center p-4 g-5">
           <h4>
             <strong>{pokemonStats.name}</strong>
